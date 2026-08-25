@@ -9,3 +9,13 @@ templates
 # The stylesheet is deliberately written one dense rule per line; reformatting
 # it would balloon the file without making the CSS any clearer.
 src/styles.css
+
+# Nico Workbench deploy assets are generated/bootstrapped static files. Keep
+# their compact form stable instead of letting Prettier rewrite the bundle.
+nico-workbench-deploy/
+
+# Superpowers planning artifacts are process documents rather than app source.
+docs/superpowers/
+
+# Existing GitHub Pages deploy workflow is maintained separately from app code.
+.github/workflows/nico-workbench-pages.yml
