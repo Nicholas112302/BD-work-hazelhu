@@ -19,13 +19,15 @@
     state.publishes=state.publishes.filter(r=>!legacyDemo(r));
     state.accounts=(state.accounts||[]).filter(a=>!/^Account 0[123]$/.test(String(a.account||'')));
     const n=before-state.publishes.length;
-    if(n){save();toast(`已清除 ${n} 条演示数据，你自己的记录已保留`)}else toast('目前没有演示数据');
+    save();
+    if(n)toast(`已清空 ${n} 条演示数据，你自己的记录已保留`);else toast('目前没有演示数据');
     syncTop();
+    if(document.querySelector('#page-settings.active'))renderSettings();
   };
   const syncTop=()=>{
     const b=document.querySelector('#demoBtn'); if(!b)return;
-    b.textContent=hasDemo()?'清除演示':'演示数据';
-    b.onclick=()=>{if(hasDemo()){if(confirm('只删除演示数据？你自己录入的真实记录会保留。'))clearDemo()}else seedDemo()};
+    b.textContent=hasDemo()?'清空演示':'演示数据';
+    b.onclick=()=>{if(hasDemo()){if(confirm('只清空演示数据？你自己录入的真实记录会保留。'))clearDemo()}else seedDemo()};
   };
   const enhanceAccount=()=>{
     const input=document.querySelector('#entryForm input[name="account"]'); if(!input||input.dataset.smartAccount)return;
@@ -42,7 +44,7 @@
     input.addEventListener('blur',()=>setTimeout(()=>box.classList.remove('show'),120));
   };
   const oldEntry=renderEntry; renderEntry=function(){oldEntry();enhanceAccount()};
-  const oldSettings=renderSettings; renderSettings=function(){oldSettings();const demo=document.querySelector('#demo2');const clearAll=document.querySelector('#clearBtn');if(demo&&clearAll&&!document.querySelector('#clearDemoBtn')){const b=document.createElement('button');b.className='btn primary';b.id='clearDemoBtn';b.textContent='清除演示数据';b.disabled=!hasDemo();b.onclick=()=>{if(confirm('只删除演示数据？你自己录入的真实记录会保留。'))clearDemo()};clearAll.parentNode.insertBefore(b,clearAll)}};
-  const oldSeed=seedDemo; seedDemo=function(){if(hasDemo()){toast('演示数据已经存在，可先清除演示数据');return}oldSeed();syncTop()};
+  const oldSettings=renderSettings; renderSettings=function(){oldSettings();const demo=document.querySelector('#demo2');const clearAll=document.querySelector('#clearBtn');let b=document.querySelector('#clearDemoBtn');if(demo&&clearAll&&!b){b=document.createElement('button');b.className='btn primary';b.id='clearDemoBtn';clearAll.parentNode.insertBefore(b,clearAll)}if(b){b.textContent='清空演示数据';b.disabled=!hasDemo();b.onclick=()=>{if(confirm('只清空演示数据？你自己录入的真实记录会保留。'))clearDemo()}}};
+  const oldSeed=seedDemo; seedDemo=function(){if(hasDemo()){toast('演示数据已经存在，可先清空演示数据');return}oldSeed();syncTop();if(document.querySelector('#page-settings.active'))renderSettings()};
   renderEntry(); renderSettings(); syncTop();
 })();
