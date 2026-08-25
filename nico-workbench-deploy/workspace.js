@@ -1,6 +1,6 @@
 (()=>{
   const KEY='nico_active_workspace';
-  const BD_URL='https://bd-work-hazelhu-byhazel.vercel.app/';
+  const BD_URL='./bd/';
   const app=document.querySelector('.app');
   const sidebar=document.querySelector('.sidebar');
   const main=document.querySelector('.main');
@@ -14,7 +14,7 @@
 
   const bd=document.createElement('section');
   bd.className='workspace-bd';
-  bd.innerHTML=`<div class="workspace-bd-badge">💼 Nico Workbench · BD 运营</div><div class="workspace-bd-tools"><a href="${BD_URL}" target="_blank" rel="noopener">↗ 单独打开 BD 工作台</a></div><div class="workspace-bd-fallback"><div><b>BD 工作台正在载入…</b><br>影视运营与 BD 运营的数据彼此独立。如果内嵌页面被浏览器阻止，可点右上角「单独打开 BD 工作台」。</div></div><iframe title="Nico BD Workbench" loading="eager" referrerpolicy="no-referrer-when-downgrade"></iframe>`;
+  bd.innerHTML=`<div class="workspace-bd-badge">💼 Nico Workbench · BD 运营</div><div class="workspace-bd-tools"><a href="${BD_URL}" target="_blank" rel="noopener">↗ 单独打开 BD 工作台</a></div><div class="workspace-bd-fallback"><div><b>BD 工作台正在载入…</b><br>这是 Nico Workbench 内部的独立 BD 工作区；影视运营与 BD 运营的数据字段和业务流程彼此分开。</div></div><iframe title="Nico BD Workbench" loading="eager"></iframe>`;
   app.appendChild(bd);
   const iframe=bd.querySelector('iframe');
 
