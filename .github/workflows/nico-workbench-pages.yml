@@ -4,8 +4,14 @@ on:
   push:
     branches: [main]
     paths:
-      - 'nico-workbench-deploy/**'
-      - '.github/workflows/nico-workbench-pages.yml'
+      - "nico-workbench-deploy/**"
+      - "src/**"
+      - "index.html"
+      - "package.json"
+      - "package-lock.json"
+      - "tsconfig*.json"
+      - "vite.config.ts"
+      - ".github/workflows/nico-workbench-pages.yml"
   workflow_dispatch:
 
 permissions:
@@ -26,14 +32,31 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Assemble Nico Workbench site
+        run: |
+          rm -rf site
+          mkdir -p site
+          cp -R nico-workbench-deploy/. site/
+          npm run build -- --base=/BD-work-hazelhu/bd/ --outDir=site/bd
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
       - name: Upload Nico Workbench artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: nico-workbench-deploy
+          path: site
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-# retriggered after enabling GitHub Pages
