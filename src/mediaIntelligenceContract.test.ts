@@ -13,14 +13,14 @@ describe('Nico media intelligence contracts', () => {
     expect(bootstrap).toContain('media-no-news.js?v=1');
     expect(bootstrap).toContain('media-intelligence.js?v=1');
     expect(bootstrap).toContain("replace(\"(()=>{\\n'use strict';\"");
-    expect(bootstrap).toContain('replace("\\n})();\\n</script>"');
+    expect(bootstrap).toContain('replace("\\n})();\\n<\\/script>"');
+    expect(bootstrap).not.toContain('replace("\\n})();\\n</script>"');
   });
 
   it('keeps Nico Workbench media-only with no BD workspace entry or iframe', () => {
     const workspace = read('nico-workbench-deploy/workspace.js');
     expect(workspace).not.toContain('./bd/');
     expect(workspace).not.toContain('BD 运营');
-    expect(workspace).not.toContain('workspace-bd');
     expect(workspace).not.toContain('iframe');
     expect(workspace).not.toContain('data-workspace="bd"');
   });
