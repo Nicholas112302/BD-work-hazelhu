@@ -11,6 +11,7 @@ export default tseslint.config(
       ".worktrees",
       "tsconfig.tsbuildinfo",
       "nico-workbench-deploy",
+      "scripts/update-media-news.mjs",
     ],
   },
   js.configs.recommended,
