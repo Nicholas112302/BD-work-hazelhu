@@ -16,6 +16,13 @@ describe('report inline editing and eye-comfort theme', () => {
     expect(patch).toContain('enhanceReportTable');
   });
 
+  it('keeps an open report editor from being erased by history table rerenders', () => {
+    const history = read('nico-workbench-deploy/excel-import.js');
+    expect(history).toContain("table.querySelector('.reportInlineEditor')");
+    expect(history).toContain('if(table.querySelector');
+    expect(history).toContain('return;');
+  });
+
   it('uses a low-glare dark slate theme across Nico Workbench', () => {
     const css = read('nico-workbench-deploy/eye-theme.css');
     expect(css).toContain('--eye-bg:#11151c');
