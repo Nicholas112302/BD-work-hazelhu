@@ -4,11 +4,13 @@ import path from 'node:path';
 
 const root = process.cwd();
 const read = (p: string) => fs.readFileSync(path.join(root, p), 'utf8');
+const exists = (p: string) => fs.existsSync(path.join(root, p));
 
 describe('Nico media intelligence contracts', () => {
   it('injects the media intelligence assets and exposes core bindings to extension scripts', () => {
     const bootstrap = read('nico-workbench-deploy/index.html');
     expect(bootstrap).toContain('media-intelligence.css?v=1');
+    expect(bootstrap).toContain('media-no-news.js?v=1');
     expect(bootstrap).toContain('media-intelligence.js?v=1');
     expect(bootstrap).toContain("replace(\"(()=>{\\n'use strict';\"");
     expect(bootstrap).toContain('replace("\\n})();\\n</script>"');
@@ -48,25 +50,20 @@ describe('Nico media intelligence contracts', () => {
     expect(js).toContain('TikTok');
   });
 
-  it('adds a daily medium/high-impact news radar with protected API usage', () => {
-    const script = read('scripts/update-media-news.mjs');
-    const workflow = read('.github/workflows/media-news.yml');
-    const js = read('nico-workbench-deploy/media-intelligence.js');
-    expect(workflow).toContain('cron:');
-    expect(workflow).toContain('OPENAI_API_KEY');
-    expect(workflow).not.toMatch(/sk-[A-Za-z0-9_-]{20,}/);
-    expect(script).toContain('MAX_CANDIDATES');
-    expect(script).toContain('MAX_DEEP_ITEMS');
-    expect(script).toContain('gpt-5.6-luna');
-    expect(script).toContain("impact === 'medium' || x.impact === 'high'");
-    expect(js).toContain('影视行业新闻雷达');
-    expect(js).toContain('今日暂无需要跟进的影视行业动态');
-    expect(read('nico-workbench-deploy/news.json')).toContain('"items"');
+  it('removes the automated news radar and hides its UI', () => {
+    expect(exists('.github/workflows/media-news.yml')).toBe(false);
+    expect(exists('scripts/update-media-news.mjs')).toBe(false);
+    expect(exists('nico-workbench-deploy/news.json')).toBe(false);
+    const shim = read('nico-workbench-deploy/media-no-news.js');
+    expect(shim).toContain('.nav[data-route="news"]');
+    expect(shim).toContain('#page-news');
+    expect(shim).toContain("delete data.industryNews");
+    expect(shim).toContain('News radar disabled');
   });
 
-  it('builds a provenance-aware fused Mentor Case', () => {
+  it('builds a provenance-aware fused Mentor Case for the remaining media signals', () => {
     const js = read('nico-workbench-deploy/media-intelligence.js');
-    for (const bucket of ['historicalViralEvidence', 'recentPublishEvidence', 'dramaLibrary', 'riskEvidence', 'industryNews']) {
+    for (const bucket of ['historicalViralEvidence', 'recentPublishEvidence', 'dramaLibrary', 'riskEvidence']) {
       expect(js).toContain(bucket);
     }
     expect(js).toContain('不是因果证明');
