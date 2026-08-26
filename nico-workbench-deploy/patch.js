@@ -43,8 +43,16 @@
     box.addEventListener('mousedown',e=>{const b=e.target.closest('.account-option');if(!b)return;e.preventDefault();input.value=b.dataset.account;box.classList.remove('show');input.focus()});
     input.addEventListener('blur',()=>setTimeout(()=>box.classList.remove('show'),120));
   };
+  const hideMotivationMeta=()=>{
+    document.querySelectorAll('body *').forEach(el=>{
+      if(el.children.length)return;
+      const text=(el.textContent||'').trim();
+      if(text.startsWith('今日鼓励语 · Day')||text==='365 天自动换，不用手动') el.style.display='none';
+    });
+  };
   const oldEntry=renderEntry; renderEntry=function(){oldEntry();enhanceAccount()};
   const oldSettings=renderSettings; renderSettings=function(){oldSettings();const demo=document.querySelector('#demo2');const clearAll=document.querySelector('#clearBtn');let b=document.querySelector('#clearDemoBtn');if(demo&&clearAll&&!b){b=document.createElement('button');b.className='btn primary';b.id='clearDemoBtn';clearAll.parentNode.insertBefore(b,clearAll)}if(b){b.textContent='清空演示数据';b.disabled=!hasDemo();b.onclick=()=>{if(confirm('只清空演示数据？你自己录入的真实记录会保留。'))clearDemo()}}};
   const oldSeed=seedDemo; seedDemo=function(){if(hasDemo()){toast('演示数据已经存在，可先清空演示数据');return}oldSeed();syncTop();if(document.querySelector('#page-settings.active'))renderSettings()};
-  renderEntry(); renderSettings(); syncTop();
+  new MutationObserver(()=>hideMotivationMeta()).observe(document.body,{childList:true,subtree:true});
+  renderEntry(); renderSettings(); syncTop(); hideMotivationMeta();
 })();
