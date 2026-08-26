@@ -13,12 +13,13 @@ const pagesWorkflow = readFileSync(
 );
 
 describe("internal BD GitHub Pages deployment", () => {
-  it("loads the BD workspace from the same-origin /bd path", () => {
-    expect(workspaceScript).toContain("./bd/");
-    expect(workspaceScript).not.toContain("bd-work-hazelhu-byhazel.vercel.app");
+  it("does not expose the BD workspace from Nico Workbench", () => {
+    expect(workspaceScript).not.toContain("./bd/");
+    expect(workspaceScript).not.toContain("BD 运营");
+    expect(workspaceScript).not.toContain('data-workspace="bd"');
   });
 
-  it("builds the existing Vite BD app into the Pages /bd directory", () => {
+  it("keeps the existing Vite BD app source deployable as a recoverable backup", () => {
     expect(pagesWorkflow).toContain("npm ci");
     expect(pagesWorkflow).toContain("/BD-work-hazelhu/bd/");
     expect(pagesWorkflow).toContain("site/bd");
