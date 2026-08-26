@@ -18,15 +18,15 @@ describe('report inline editing and eye-comfort theme', () => {
 
   it('uses a low-glare dark slate theme across Nico Workbench', () => {
     const css = read('nico-workbench-deploy/eye-theme.css');
-    expect(css).toContain('--eye-bg:#111722');
-    expect(css).toContain('--eye-surface:#18212e');
+    expect(css).toContain('--eye-bg:#11151c');
+    expect(css).toContain('--eye-surface:#1b222c');
     expect(css).toContain('body{background:var(--eye-bg)!important');
     expect(css).toContain('.reportInlineEditor');
   });
 
   it('loads both enhancements from the Nico bootstrap', () => {
     const bootstrap = read('nico-workbench-deploy/index.html');
-    expect(bootstrap).toContain('eye-theme.css?v=1');
-    expect(bootstrap).toContain('report-edit.js?v=1');
+    expect(bootstrap).toContain('eye-theme.css?v=3');
+    expect(bootstrap).toContain('report-edit.js?v=2');
   });
 });
