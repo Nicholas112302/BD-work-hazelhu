@@ -23,6 +23,13 @@ describe('report inline editing and eye-comfort theme', () => {
     expect(history).toContain('return;');
   });
 
+  it('does not continuously rebuild an unchanged history table', () => {
+    const history = read('nico-workbench-deploy/excel-import.js');
+    expect(history).toContain('historyRenderKey');
+    expect(history).toContain('table.dataset.historyRenderKey');
+    expect(history).toContain('if(table.dataset.historyRenderKey===historyRenderKey)return');
+  });
+
   it('uses a low-glare dark slate theme across Nico Workbench', () => {
     const css = read('nico-workbench-deploy/eye-theme.css');
     expect(css).toContain('--eye-bg:#11151c');
