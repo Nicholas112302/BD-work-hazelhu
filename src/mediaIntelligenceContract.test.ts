@@ -25,6 +25,17 @@ describe('Nico media intelligence contracts', () => {
     expect(workspace).not.toContain('data-workspace="bd"');
   });
 
+  it('lets users edit or delete existing publish records from 发布录入', () => {
+    const patch = read('nico-workbench-deploy/patch.js');
+    expect(patch).toContain('最近发布记录');
+    expect(patch).toContain('编辑记录');
+    expect(patch).toContain('删除记录');
+    expect(patch).toContain('editPublishRecord');
+    expect(patch).toContain('deletePublishRecord');
+    expect(patch).toContain('state.publishes.findIndex');
+    expect(patch).toContain('confirm(');
+  });
+
   it('implements the approved viral qualification and snapshot rules', () => {
     const js = read('nico-workbench-deploy/media-intelligence.js');
     expect(js).toContain('100000');
