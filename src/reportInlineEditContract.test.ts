@@ -26,7 +26,7 @@ describe('report inline editing and eye-comfort theme', () => {
 
   it('loads both enhancements from the Nico bootstrap', () => {
     const bootstrap = read('nico-workbench-deploy/index.html');
-    expect(bootstrap).toContain('eye-theme.css?v=3');
+    expect(bootstrap).toContain('eye-theme.css?v=5');
     expect(bootstrap).toContain('report-edit.js?v=2');
   });
 });
