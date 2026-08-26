@@ -67,6 +67,8 @@ describe('Nico media intelligence contracts', () => {
     expect(shim).toContain('#page-news');
     expect(shim).toContain("delete data.industryNews");
     expect(shim).toContain('News radar disabled');
+    expect(shim).toContain('dramaDesc.textContent!==dramaText');
+    expect(shim).toContain('mentorDesc.textContent!==mentorText');
   });
 
   it('builds a provenance-aware fused Mentor Case for the remaining media signals', () => {
