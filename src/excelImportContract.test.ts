@@ -19,6 +19,18 @@ describe('Excel import source labels and low-glare theme', () => {
     expect(js).toContain('只看 Excel 导入');
   });
 
+  it('lets the company report show all history, current week, or a selected week', () => {
+    const js = read('nico-workbench-deploy/excel-import.js');
+    expect(js).toContain('全部历史');
+    expect(js).toContain('当前周');
+    expect(js).toContain('指定 Week');
+    expect(js).toContain('reportHistoryMode');
+    expect(js).toContain('selectedReportWeek');
+    expect(js).toContain('showImportedHistory');
+    expect(js).toContain("sessionStorage.setItem('nico_report_history_mode','all')");
+    expect(js).toContain("sessionStorage.setItem('nico_report_excel_only','1')");
+  });
+
   it('overrides bright dashboard surfaces with a consistent low-glare dark palette', () => {
     const css = read('nico-workbench-deploy/eye-theme.css');
     expect(css).toContain('--eye-bg:#11151c');
