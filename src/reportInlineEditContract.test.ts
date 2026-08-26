@@ -16,6 +16,13 @@ describe('report inline editing and eye-comfort theme', () => {
     expect(patch).toContain('enhanceReportTable');
   });
 
+  it('includes followers gained as a backfillable report field', () => {
+    const patch = read('nico-workbench-deploy/report-edit.js');
+    expect(patch).toContain('增粉数');
+    expect(patch).toContain('name="followersGained"');
+    expect(patch).toContain("followersGained:Number(f.get('followersGained')||0)");
+  });
+
   it('keeps an open report editor from being erased by history table rerenders', () => {
     const history = read('nico-workbench-deploy/excel-import.js');
     expect(history).toContain("table.querySelector('.reportInlineEditor')");
@@ -38,9 +45,9 @@ describe('report inline editing and eye-comfort theme', () => {
     expect(css).toContain('.reportInlineEditor');
   });
 
-  it('loads both enhancements from the Nico bootstrap', () => {
+  it('loads the latest report editor asset from the Nico bootstrap', () => {
     const bootstrap = read('nico-workbench-deploy/index.html');
     expect(bootstrap).toContain('eye-theme.css?v=5');
-    expect(bootstrap).toContain('report-edit.js?v=2');
+    expect(bootstrap).toContain('report-edit.js?v=3');
   });
 });
