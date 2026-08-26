@@ -22,6 +22,8 @@ describe('Wednesday-Tuesday report period normalization', () => {
   it('loads the period normalizer before Excel/report enhancement scripts', () => {
     const html = read('nico-workbench-deploy/index.html');
     expect(html).toContain('period-normalizer.js?v=1');
-    expect(html.indexOf('period-normalizer.js?v=1')).toBeLessThan(html.indexOf('excel-import.js'));
+    expect(html.indexOf('period-normalizer.js?v=1')).toBeLessThan(
+      html.indexOf('excel-import.js'),
+    );
   });
 });
