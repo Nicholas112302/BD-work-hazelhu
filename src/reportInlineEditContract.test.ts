@@ -38,14 +38,14 @@ describe('report inline editing and eye-comfort theme', () => {
   });
 
   it('shows the company spreadsheet metric columns and copies exactly 14 company columns', () => {
-    const history = read('nico-workbench-deploy/excel-import.js');
-    expect(history).toContain('播放量');
-    expect(history).toContain('点赞量');
-    expect(history).toContain('增粉数');
-    expect(history).toContain('一键复制到公司表格');
-    expect(history).toContain('companyCopyColumns');
-    expect(history).toContain("['市场','Month','Week','发布日期','账号','片名','产地（微剧就写微剧）','片单类型','是否爱奇艺的剧','内容制作方向','视频链接','播放量','点赞量','增粉数']");
-    expect(history).toContain("navigator.clipboard.writeText");
+    const copy = read('nico-workbench-deploy/company-report-copy.js');
+    expect(copy).toContain('播放量');
+    expect(copy).toContain('点赞量');
+    expect(copy).toContain('增粉数');
+    expect(copy).toContain('一键复制到公司表格');
+    expect(copy).toContain('companyCopyColumns');
+    expect(copy).toContain("['市场','Month','Week','发布日期','账号','片名','产地（微剧就写微剧）','片单类型','是否爱奇艺的剧','内容制作方向','视频链接','播放量','点赞量','增粉数']");
+    expect(copy).toContain('navigator.clipboard.writeText');
   });
 
   it('uses a low-glare dark slate theme across Nico Workbench', () => {
@@ -56,9 +56,10 @@ describe('report inline editing and eye-comfort theme', () => {
     expect(css).toContain('.reportInlineEditor');
   });
 
-  it('loads the latest report editor asset from the Nico bootstrap', () => {
+  it('loads the latest report enhancements from the Nico bootstrap', () => {
     const bootstrap = read('nico-workbench-deploy/index.html');
     expect(bootstrap).toContain('eye-theme.css?v=5');
     expect(bootstrap).toContain('report-edit.js?v=3');
+    expect(bootstrap).toContain('company-report-copy.js?v=1');
   });
 });
