@@ -14,6 +14,14 @@ src/styles.css
 # their compact form stable instead of letting Prettier rewrite the bundle.
 nico-workbench-deploy/
 
+# Media news automation is a compact operational script/workflow maintained as
+# deployment infrastructure rather than application UI source.
+scripts/update-media-news.mjs
+.github/workflows/media-news.yml
+
+# Contract test mirrors exact static deployment strings.
+src/mediaIntelligenceContract.test.ts
+
 # Superpowers planning artifacts are process documents rather than app source.
 docs/superpowers/
 
