@@ -6,10 +6,12 @@ const root = process.cwd();
 const read = (p: string) => fs.readFileSync(path.join(root, p), 'utf8');
 
 describe('Nico media intelligence contracts', () => {
-  it('injects the media intelligence assets into Nico Workbench', () => {
+  it('injects the media intelligence assets and exposes core bindings to extension scripts', () => {
     const bootstrap = read('nico-workbench-deploy/index.html');
     expect(bootstrap).toContain('media-intelligence.css?v=1');
     expect(bootstrap).toContain('media-intelligence.js?v=1');
+    expect(bootstrap).toContain("replace(\"(()=>{\\n'use strict';\"");
+    expect(bootstrap).toContain('replace("\\n})();\\n</script>"');
     expect(read('nico-workbench-deploy/workspace.js')).toContain('./bd/');
   });
 
