@@ -10,6 +10,7 @@ describe('Nico media intelligence contracts', () => {
     const bootstrap = read('nico-workbench-deploy/index.html');
     expect(bootstrap).toContain('media-intelligence.css?v=1');
     expect(bootstrap).toContain('media-intelligence.js?v=1');
+    expect(read('nico-workbench-deploy/workspace.js')).toContain('./bd/');
   });
 
   it('implements the approved viral qualification and snapshot rules', () => {
