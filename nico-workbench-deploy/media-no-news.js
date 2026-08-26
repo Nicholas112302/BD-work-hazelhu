@@ -6,12 +6,14 @@ window.fetch=(input,init)=>{
   if(/(?:^|\/)news\.json(?:[?#]|$)/.test(url))return Promise.reject(new Error('News radar disabled'));
   return originalFetch(input,init);
 };
+const dramaText='把库存剧、待剪剧和历史剧放在这里；系统结合账号表现、爆款与风险，判断更适合哪个 TikTok 账号。';
+const mentorText='把历史爆款、近期发布、片单和违规风险一起交给 Mentor；Hashtag 只作为信号，不是因果证明。';
 const stripNews=()=>{
   document.querySelectorAll('.nav[data-route="news"],#page-news').forEach(n=>n.remove());
   const dramaDesc=document.querySelector('#page-drama-library .desc');
-  if(dramaDesc)dramaDesc.textContent='把库存剧、待剪剧和历史剧放在这里；系统结合账号表现、爆款与风险，判断更适合哪个 TikTok 账号。';
+  if(dramaDesc&&dramaDesc.textContent!==dramaText)dramaDesc.textContent=dramaText;
   const mentorDesc=document.querySelector('#miMentorPanel p');
-  if(mentorDesc)mentorDesc.textContent='把历史爆款、近期发布、片单和违规风险一起交给 Mentor；Hashtag 只作为信号，不是因果证明。';
+  if(mentorDesc&&mentorDesc.textContent!==mentorText)mentorDesc.textContent=mentorText;
 };
 new MutationObserver(stripNews).observe(document.documentElement,{childList:true,subtree:true});
 document.addEventListener('click',e=>{
