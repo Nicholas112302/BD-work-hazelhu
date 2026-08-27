@@ -19,7 +19,9 @@ describe('company report pagination', () => {
   it('resets to page one when report filters change', () => {
     const code = read('nico-workbench-deploy/company-report-copy.js');
     expect(code).toContain('reportPage=1');
-    expect(code).toContain('.reportHistoryMode,.excelOnlyFilter,.selectedReportWeek');
+    expect(code).toContain(
+      '.reportHistoryMode,.excelOnlyFilter,.selectedReportWeek',
+    );
   });
 
   it('copies all currently filtered records instead of only the visible page', () => {
