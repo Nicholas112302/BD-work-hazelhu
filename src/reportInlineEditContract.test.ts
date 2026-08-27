@@ -70,13 +70,23 @@ describe('report inline editing and eye-comfort theme', () => {
     const css = read('nico-workbench-deploy/eye-theme.css');
     expect(css).toContain('--eye-bg:#11151c');
     expect(css).toContain('--eye-surface:#1b222c');
+    expect(css).toContain('--eye-text-strong:#eef3f8');
+    expect(css).toContain('--eye-text-soft:#c7d0da');
+    expect(css).toContain('--eye-heading:#9bb7d9');
     expect(css).toContain('body{background:var(--eye-bg)!important');
+    expect(css).toContain('[style*="background:#fff"]');
+    expect(css).toContain('[style*="background: #fff"]');
+    expect(css).toContain('[style*="background:white"]');
+    expect(css).toContain('.mi-mini span,.mi-tags span');
+    expect(css).toContain('.mi-fit');
+    expect(css).toContain('.strategy');
+    expect(css).toContain('.account');
     expect(css).toContain('.reportInlineEditor');
   });
 
   it('loads the latest report enhancements from the Nico bootstrap', () => {
     const bootstrap = read('nico-workbench-deploy/index.html');
-    expect(bootstrap).toContain('eye-theme.css?v=5');
+    expect(bootstrap).toContain('eye-theme.css?v=6');
     expect(bootstrap).toContain('report-edit.js?v=3');
     expect(bootstrap).toContain('company-report-copy.js?v=3');
   });
