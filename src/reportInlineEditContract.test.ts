@@ -48,6 +48,17 @@ describe('report inline editing and eye-comfort theme', () => {
     expect(copy).toContain('navigator.clipboard.writeText');
   });
 
+  it('paginates company report records 15 at a time without limiting copy', () => {
+    const copy = read('nico-workbench-deploy/company-report-copy.js');
+    expect(copy).toContain('REPORT_PAGE_SIZE=15');
+    expect(copy).toContain('reportPagination');
+    expect(copy).toContain('上一页');
+    expect(copy).toContain('下一页');
+    expect(copy).toContain('每页 15 条');
+    expect(copy).toContain('filteredRecords(table)');
+    expect(copy).toContain('copyFiltered(table)');
+  });
+
   it('uses a low-glare dark slate theme across Nico Workbench', () => {
     const css = read('nico-workbench-deploy/eye-theme.css');
     expect(css).toContain('--eye-bg:#11151c');
@@ -60,6 +71,6 @@ describe('report inline editing and eye-comfort theme', () => {
     const bootstrap = read('nico-workbench-deploy/index.html');
     expect(bootstrap).toContain('eye-theme.css?v=5');
     expect(bootstrap).toContain('report-edit.js?v=3');
-    expect(bootstrap).toContain('company-report-copy.js?v=1');
+    expect(bootstrap).toContain('company-report-copy.js?v=2');
   });
 });
