@@ -23,6 +23,23 @@ describe('report inline editing and eye-comfort theme', () => {
     expect(patch).toContain("followersGained:Number(f.get('followersGained')||0)");
   });
 
+  it('distinguishes an untouched followers field from an explicitly entered zero', () => {
+    const patch = read('nico-workbench-deploy/followers-reminder.js');
+    expect(patch).toContain('followersGainedRecorded');
+    expect(patch).toContain("raw!==''");
+    expect(patch).toContain("input.value=''");
+  });
+
+  it('marks only the latest closed Wednesday-to-Tuesday report week that still needs followers gained', () => {
+    const copy = read('nico-workbench-deploy/company-report-copy.js');
+    expect(copy).toContain('followersReminder');
+    expect(copy).toContain('待补涨粉');
+    expect(copy).toContain('⚠');
+    expect(copy).toContain('latestClosedReportWindow');
+    expect(copy).toContain('publishDate');
+    expect(copy).toContain('followersGainedRecorded');
+  });
+
   it('keeps an open report editor from being erased by history table rerenders', () => {
     const history = read('nico-workbench-deploy/excel-import.js');
     expect(history).toContain("table.querySelector('.reportInlineEditor')");
@@ -46,6 +63,7 @@ describe('report inline editing and eye-comfort theme', () => {
     expect(copy).toContain('companyCopyColumns');
     expect(copy).toContain("['市场','Month','Week','发布日期','账号','片名','产地（微剧就写微剧）','片单类型','是否爱奇艺的剧','内容制作方向','视频链接','播放量','点赞量','增粉数']");
     expect(copy).toContain('navigator.clipboard.writeText');
+    expect(copy).toContain('followersMetric(r)');
   });
 
   it('paginates company report records 15 at a time without limiting copy', () => {
@@ -88,6 +106,8 @@ describe('report inline editing and eye-comfort theme', () => {
     const bootstrap = read('nico-workbench-deploy/index.html');
     expect(bootstrap).toContain('eye-theme.css?v=6');
     expect(bootstrap).toContain('report-edit.js?v=3');
-    expect(bootstrap).toContain('company-report-copy.js?v=3');
+    expect(bootstrap).toContain('company-report-copy.js?v=4');
+    expect(bootstrap).toContain('followers-reminder.js?v=1');
+    expect(bootstrap).toContain('followers-reminder.css?v=1');
   });
 });
