@@ -23,6 +23,22 @@ describe('report inline editing and eye-comfort theme', () => {
     expect(patch).toContain("followersGained:Number(f.get('followersGained')||0)");
   });
 
+  it('distinguishes an untouched followers field from an explicitly entered zero', () => {
+    const patch = read('nico-workbench-deploy/report-edit.js');
+    expect(patch).toContain('followersGainedRecorded');
+    expect(patch).toContain("f.get('followersGained')");
+    expect(patch).toContain("followersGainedRecorded:true");
+  });
+
+  it('marks only the selected report week rows that still need followers gained', () => {
+    const copy = read('nico-workbench-deploy/company-report-copy.js');
+    expect(copy).toContain('followersReminder');
+    expect(copy).toContain('待补涨粉');
+    expect(copy).toContain('⚠');
+    expect(copy).toContain('selectedReportWeek');
+    expect(copy).toContain('followersGainedRecorded');
+  });
+
   it('keeps an open report editor from being erased by history table rerenders', () => {
     const history = read('nico-workbench-deploy/excel-import.js');
     expect(history).toContain("table.querySelector('.reportInlineEditor')");
