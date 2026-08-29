@@ -30,12 +30,13 @@ describe('report inline editing and eye-comfort theme', () => {
     expect(patch).toContain("input.value=''");
   });
 
-  it('marks only the selected report week rows that still need followers gained', () => {
+  it('marks only the latest closed Wednesday-to-Tuesday report week that still needs followers gained', () => {
     const copy = read('nico-workbench-deploy/company-report-copy.js');
     expect(copy).toContain('followersReminder');
     expect(copy).toContain('待补涨粉');
     expect(copy).toContain('⚠');
-    expect(copy).toContain('selectedReportWeek');
+    expect(copy).toContain('latestClosedReportWindow');
+    expect(copy).toContain('publishDate');
     expect(copy).toContain('followersGainedRecorded');
   });
 
