@@ -87,14 +87,14 @@ describe('report inline editing and eye-comfort theme', () => {
     expect(copy).not.toContain('existing.outerHTML=html');
   });
 
-  it('uses a low-glare dark slate theme across Nico Workbench', () => {
+  it('uses the Rayan Forest Night low-glare theme across Nico Workbench', () => {
     const css = read('nico-workbench-deploy/eye-theme.css');
-    expect(css).toContain('--eye-bg:#11151c');
-    expect(css).toContain('--eye-surface:#1b222c');
-    expect(css).toContain('--eye-text-strong:#eef3f8');
-    expect(css).toContain('--eye-text-soft:#c7d0da');
-    expect(css).toContain('--eye-heading:#9bb7d9');
-    expect(css).toContain('body{background:var(--eye-bg)!important');
+    expect(css).toContain('--eye-bg:#111411');
+    expect(css).toContain('--eye-surface:#19201b');
+    expect(css).toContain('--eye-text-strong:#eef2ed');
+    expect(css).toContain('--eye-text-soft:#c8d2c9');
+    expect(css).toContain('--eye-heading:#a5c4aa');
+    expect(css).toContain('--eye-accent:#6f9b78');
     expect(css).toContain('[style*="background:#fff"]');
     expect(css).toContain('[style*="background: #fff"]');
     expect(css).toContain('[style*="background:white"]');
@@ -105,12 +105,14 @@ describe('report inline editing and eye-comfort theme', () => {
     expect(css).toContain('.reportInlineEditor');
   });
 
-  it('loads the latest report enhancements from the Nico bootstrap', () => {
+  it('loads the latest report and Agent-ready enhancements from the Nico bootstrap', () => {
     const bootstrap = read('nico-workbench-deploy/index.html');
-    expect(bootstrap).toContain('eye-theme.css?v=6');
+    expect(bootstrap).toContain('eye-theme.css?v=7');
     expect(bootstrap).toContain('report-edit.js?v=3');
     expect(bootstrap).toContain('company-report-copy.js?v=5');
     expect(bootstrap).toContain('followers-reminder.js?v=1');
     expect(bootstrap).toContain('followers-reminder.css?v=1');
+    expect(bootstrap).toContain('agent-ready.js?v=1');
+    expect(bootstrap).toContain('agent-ready.css?v=1');
   });
 });
