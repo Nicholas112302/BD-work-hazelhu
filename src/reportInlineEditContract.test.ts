@@ -30,14 +30,17 @@ describe('report inline editing and eye-comfort theme', () => {
     expect(patch).toContain("input.value=''");
   });
 
-  it('marks only the latest closed Wednesday-to-Tuesday report week that still needs followers gained', () => {
+  it('reminds on the active Wednesday-to-Tuesday week and the immediately prior week only when followers were never confirmed', () => {
     const copy = read('nico-workbench-deploy/company-report-copy.js');
     expect(copy).toContain('followersReminder');
     expect(copy).toContain('待补涨粉');
     expect(copy).toContain('⚠');
-    expect(copy).toContain('latestClosedReportWindow');
+    expect(copy).toContain('activeFollowersReminderWindow');
+    expect(copy).toContain('currentStart');
+    expect(copy).toContain('previousStart');
     expect(copy).toContain('publishDate');
     expect(copy).toContain('followersGainedRecorded');
+    expect(copy).not.toContain('latestClosedReportWindow');
   });
 
   it('keeps an open report editor from being erased by history table rerenders', () => {
@@ -106,7 +109,7 @@ describe('report inline editing and eye-comfort theme', () => {
     const bootstrap = read('nico-workbench-deploy/index.html');
     expect(bootstrap).toContain('eye-theme.css?v=6');
     expect(bootstrap).toContain('report-edit.js?v=3');
-    expect(bootstrap).toContain('company-report-copy.js?v=4');
+    expect(bootstrap).toContain('company-report-copy.js?v=5');
     expect(bootstrap).toContain('followers-reminder.js?v=1');
     expect(bootstrap).toContain('followers-reminder.css?v=1');
   });
