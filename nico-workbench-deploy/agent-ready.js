@@ -44,8 +44,8 @@ function mergeTrusted(existing,incoming,{incomingTrust='agent-generated',fieldTr
   const result={...existing};const conflicts=[];
   for(const [key,value] of Object.entries(incoming||{})){
     const currentTrust=fieldTrust[key]||existing?.__provenance?.[key]||'agent-generated';
-    const protectedByHuman=PROTECTED_FIELDS.has(key)&&currentTrust==='human-confirmed';
-    if(protectedByHuman||((TRUST[incomingTrust]||0)<(TRUST[currentTrust]||0)&&existing?.[key]!==undefined&&existing[key]!==value)){
+    const protectedFromAutomation=PROTECTED_FIELDS.has(key)&&incomingTrust!=='human-confirmed';
+    if(protectedFromAutomation||((TRUST[incomingTrust]||0)<(TRUST[currentTrust]||0)&&existing?.[key]!==undefined&&existing[key]!==value)){
       conflicts.push({field:key,kept:existing?.[key],rejected:value,currentTrust,incomingTrust});continue;
     }
     result[key]=value;
