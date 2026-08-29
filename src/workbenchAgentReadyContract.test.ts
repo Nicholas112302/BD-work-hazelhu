@@ -1,7 +1,8 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
-const deployPath = (name: string) => new URL(`../nico-workbench-deploy/${name}`, import.meta.url);
+const deployPath = (name: string) =>
+  new URL(`../nico-workbench-deploy/${name}`, import.meta.url);
 const readDeploy = (name: string) => readFileSync(deployPath(name), 'utf8');
 
 describe('Nico Workbench agent-ready deployment contract', () => {
