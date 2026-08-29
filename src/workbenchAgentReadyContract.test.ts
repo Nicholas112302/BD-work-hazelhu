@@ -43,6 +43,14 @@ describe('Nico Workbench agent-ready deployment contract', () => {
     }
   });
 
+  it('blocks non-human writes to protected fields even for legacy records without provenance', () => {
+    const script = readDeploy('agent-ready.js');
+
+    expect(script).toContain(
+      "PROTECTED_FIELDS.has(key)&&incomingTrust!=='human-confirmed'",
+    );
+  });
+
   it('uses a readable Rayan Forest Night palette instead of the old blue-gray accent palette', () => {
     const theme = readDeploy('eye-theme.css');
 
