@@ -24,10 +24,10 @@ describe('report inline editing and eye-comfort theme', () => {
   });
 
   it('distinguishes an untouched followers field from an explicitly entered zero', () => {
-    const patch = read('nico-workbench-deploy/report-edit.js');
+    const patch = read('nico-workbench-deploy/followers-reminder.js');
     expect(patch).toContain('followersGainedRecorded');
-    expect(patch).toContain("f.get('followersGained')");
-    expect(patch).toContain("followersGainedRecorded:true");
+    expect(patch).toContain("raw!==''");
+    expect(patch).toContain("input.value=''");
   });
 
   it('marks only the selected report week rows that still need followers gained', () => {
@@ -62,6 +62,7 @@ describe('report inline editing and eye-comfort theme', () => {
     expect(copy).toContain('companyCopyColumns');
     expect(copy).toContain("['市场','Month','Week','发布日期','账号','片名','产地（微剧就写微剧）','片单类型','是否爱奇艺的剧','内容制作方向','视频链接','播放量','点赞量','增粉数']");
     expect(copy).toContain('navigator.clipboard.writeText');
+    expect(copy).toContain('followersMetric(r)');
   });
 
   it('paginates company report records 15 at a time without limiting copy', () => {
@@ -104,6 +105,8 @@ describe('report inline editing and eye-comfort theme', () => {
     const bootstrap = read('nico-workbench-deploy/index.html');
     expect(bootstrap).toContain('eye-theme.css?v=6');
     expect(bootstrap).toContain('report-edit.js?v=3');
-    expect(bootstrap).toContain('company-report-copy.js?v=3');
+    expect(bootstrap).toContain('company-report-copy.js?v=4');
+    expect(bootstrap).toContain('followers-reminder.js?v=1');
+    expect(bootstrap).toContain('followers-reminder.css?v=1');
   });
 });
