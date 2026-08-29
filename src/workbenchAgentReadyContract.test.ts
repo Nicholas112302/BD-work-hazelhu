@@ -1,8 +1,10 @@
 import { existsSync, readFileSync } from 'node:fs';
+import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
+const root = process.cwd();
 const deployPath = (name: string) =>
-  new URL(`../nico-workbench-deploy/${name}`, import.meta.url);
+  path.join(root, 'nico-workbench-deploy', name);
 const readDeploy = (name: string) => readFileSync(deployPath(name), 'utf8');
 
 describe('Nico Workbench agent-ready deployment contract', () => {
@@ -58,7 +60,7 @@ describe('Nico Workbench agent-ready deployment contract', () => {
 
     expect(css).toContain('.rayan-decor');
     expect(css).toContain('pointer-events:none');
-    expect(css).toMatch(/@media\(max-width:\s*1100px\)/);
-    expect(css).toMatch(/\.rayan-decor[^}]*display:none/s);
+    expect(css).toContain('@media(max-width:1100px)');
+    expect(css).toMatch(/@media\(max-width:1100px\)\{\.rayan-decor\{display:none/);
   });
 });
