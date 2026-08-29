@@ -39,7 +39,7 @@ Minimum clip fields:
 - `duration_seconds`
 - `media_hash`
 - `fingerprint`
-- `status` (`received`, `processing`, `recommended`, `test`, `pending_publish`, `published`, `deferred`, `rejected`, `duplicate`, `needs_review`)
+- `status` (`received`, `ready_for_review`, `waiting_media_scout`, `processing`, `media_scout_completed`, `recommended`, `test`, `pending_publish`, `published`, `deferred`, `rejected`, `duplicate`, `needs_review`)
 - `human_decision`
 - `recommended_accounts`
 - `published_account`
@@ -49,7 +49,46 @@ Minimum clip fields:
 
 V1 UI may use metadata/placeholders before real FFmpeg upload and VPS media storage exist.
 
-### 3. Agent Inbox / Needs Review
+### 3. Media Scout submission flow
+The Workbench must make the human-to-Media-Scout review flow explicit.
+
+Intended flow:
+1. Human uploads/imports or registers a video clip in Workbench.
+2. Workbench creates a Clip record with status `received` or `ready_for_review`.
+3. Human explicitly clicks `送交 Media Scout 审核`.
+4. Only then may the future Hermes/VPS integration enqueue the clip for Media Scout and change status to `waiting_media_scout` / `processing`.
+5. Media Scout uses FFmpeg preprocessing plus key-frame vision to produce structured analysis.
+6. The result passes through Verifier/review rules before trusted use.
+7. Workbench displays the result and lets the human decide `采用`, `暂缓`, or `不采用`.
+
+Uploading or registering a clip must NOT automatically invoke an LLM/vision model. The user controls which clips consume AI credits.
+
+Media Scout structured result should reserve fields for:
+- opening / first-3-seconds type and clarity;
+- visible conflict / emotional structure;
+- whether the clip is understandable without extensive context;
+- broad plot/conflict tags inferred from visible evidence;
+- duplicate / similarity signal;
+- visible content-risk signal;
+- recommended account(s);
+- per-account fit/recommendation strength where evidence exists;
+- recommendation outcome (`recommended`, `test`, `defer`, `not_recommended`);
+- confidence;
+- evidence/reason summary;
+- `analyzed_at`.
+
+If key frames are insufficient to support a conclusion, Media Scout must lower confidence or return `needs_review` rather than invent dialogue or unseen plot information.
+
+UI states should clearly distinguish:
+- `ready_for_review` — clip exists but no AI review has been requested;
+- `waiting_media_scout` — user requested review, waiting for Agent processing;
+- `processing` — Media Scout/FFmpeg analysis is in progress;
+- `media_scout_completed` — result returned and is available for verification/review;
+- `needs_review` — result/conflict requires human attention.
+
+Until the VPS API/FFmpeg pipeline exists, Workbench should expose the state model and submission control without pretending a real Media Scout job has run.
+
+### 4. Agent Inbox / Needs Review
 Create a staging collection for future Hermes payloads.
 
 Minimum fields:
@@ -65,7 +104,7 @@ Minimum fields:
 
 Agent-generated information must not silently become trusted human data. Pending/unverified entries are visually distinct and excluded from trusted analytics until verified.
 
-### 4. Provenance and trust precedence
+### 5. Provenance and trust precedence
 Use explicit provenance for fields/records where Agent integration can create conflicts.
 
 Trust order:
@@ -104,7 +143,7 @@ Protected fields must not be automatically overwritten:
 - human-confirmed Clip ↔ TikTok match
 - Strategy outcome (`accepted`, `partially_accepted`, `rejected`)
 
-### 5. Agent Center foundation
+### 6. Agent Center foundation
 Add one Workbench surface for integration readiness and future runtime state. V1 is a foundation panel, not a chat interface.
 
 Show four roles:
@@ -123,9 +162,11 @@ For each role reserve/display:
 
 Until VPS API integration exists, the panel should clearly show that live Agent sync is not connected rather than faking activity.
 
-### 6. Command Center additions
+### 7. Command Center additions
 Keep the homepage action-first. Add compact counters/links for:
 - pending clip decisions
+- clips ready for Media Scout review
+- clips waiting for Media Scout
 - Agent Inbox pending
 - Needs Review
 - existing follower reminders
@@ -156,22 +197,31 @@ V1 remains local/static Workbench state. The design should make future migration
 Future intended flow:
 Hermes → VPS Agent API/DB → Agent Inbox → Verifier → trusted Workbench data.
 
+Media path:
+Human clip intake → explicit `送交 Media Scout 审核` → VPS/Media Scout job → Verifier/review → Workbench result → human decision.
+
 The static Workbench must not accept unauthenticated direct internet writes.
 
 ## UI approach
 Reuse the existing eye-comfort dark theme and runtime patch architecture. Prefer one new Agent Center surface and integrate clip controls into the existing drama/media workflow rather than creating many disconnected pages.
+
+The Media Scout review action must be explicit and user-triggered so that merely adding a video does not consume AI credits.
 
 ## Error handling
 - Missing or malformed Agent payload: `failed` or `needs_review`; never guess.
 - Conflicting high-trust field: preserve existing value and create review issue.
 - Unknown account or video identity: Needs Review.
 - Duplicate URL/clip: mark duplicate; do not create trusted duplicate record.
+- Media Scout analysis requested while live Agent sync is unavailable: keep the clip safe, show `not_connected` / pending guidance, and do not fake completion.
 - Existing legacy records without provenance remain valid human/existing records and must not be downgraded.
 
 ## Testing / regression requirements
 Contract tests must cover:
 - Activity Log append behavior and persistence contract.
 - Clip schema/statuses and Drama→Clip relation.
+- `ready_for_review` → user-triggered Media Scout submission state transition.
+- Registering/uploading a clip alone does not trigger Media Scout analysis.
+- Media Scout result/status contract and human final decision protection.
 - Agent Inbox statuses and pending exclusion from trusted analytics.
 - Human > verifier > agent precedence.
 - Protected follower fields cannot be overwritten by Agent merge helpers.
@@ -184,6 +234,7 @@ All behavior changes follow RED → GREEN CI. GitHub Pages deployment must be ve
 - Live VPS API/database implementation.
 - Actual FFmpeg upload processing.
 - Speech-to-text.
+- Automatic AI review immediately upon clip upload/import.
 - Automatic TikTok publishing or creator-backend automation.
 - Running Hermes Cron jobs.
 - Full Strategy Center or automated Strategy decisions.
@@ -191,8 +242,8 @@ All behavior changes follow RED → GREEN CI. GitHub Pages deployment must be ve
 
 ## Rollout order
 1. Add state contracts and Activity Log.
-2. Add Clip layer and basic material decision UI.
+2. Add Clip layer, basic material decision UI, and explicit `送交 Media Scout 审核` state flow.
 3. Add Agent Inbox / provenance merge rules.
 4. Add Agent Center foundation and Command Center counters.
 5. Verify all legacy workflows.
-6. Only after this V1 is stable, return to Hermes repository/profile sync and Tracker manual tests.
+6. Only after this V1 is stable, return to Hermes repository/profile sync and Tracker/Media Scout manual tests.
