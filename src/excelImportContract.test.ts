@@ -31,11 +31,12 @@ describe('Excel import source labels and low-glare theme', () => {
     expect(js).toContain("sessionStorage.setItem('nico_report_excel_only','1')");
   });
 
-  it('overrides bright dashboard surfaces with a consistent low-glare dark palette', () => {
+  it('overrides bright dashboard surfaces with the Rayan Forest Night low-glare palette', () => {
     const css = read('nico-workbench-deploy/eye-theme.css');
-    expect(css).toContain('--eye-bg:#11151c');
-    expect(css).toContain('--eye-surface:#1b222c');
-    expect(css).toContain('--eye-surface-2:#232c38');
+    expect(css).toContain('--eye-bg:#111411');
+    expect(css).toContain('--eye-surface:#19201b');
+    expect(css).toContain('--eye-surface-2:#202922');
+    expect(css).toContain('--eye-accent:#6f9b78');
     expect(css).toContain('.hero');
     expect(css).toContain('.statCard');
     expect(css).toContain('.coreCard');

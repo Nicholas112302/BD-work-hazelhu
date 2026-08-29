@@ -24,6 +24,7 @@ src/mediaIntelligenceContract.test.ts
 src/excelImportContract.test.ts
 src/reportInlineEditContract.test.ts
 src/reportPeriodContract.test.ts
+src/workbenchAgentReadyContract.test.ts
 
 # Superpowers planning artifacts are process documents rather than app source.
 docs/superpowers/
