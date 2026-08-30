@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-const TRACKER_INPUT_EXPORT_VERSION='2';
+const TRACKER_INPUT_EXPORT_VERSION='3';
 const text=value=>String(value??'').trim();
 const REPORT_TIMEZONE='Asia/Singapore';
 const GMT8_OFFSET='+08:00';
@@ -135,19 +135,43 @@ function exportTrackerInput(){
   downloadJson(payload,`tracker-input-${start_date}_to_${end_date}.json`);
   if(typeof toast==='function')toast(`已导出 ${payload.videos.length} 条 Tracker Input；有 ${missingLinks} 条缺少视频链接；有 ${accountUrlMismatches} 条账号与视频链接不一致`);
 }
-function ensureButton(){
-  document.querySelectorAll('.reportHistoryControls').forEach(bar=>{
-    if(bar.querySelector('.trackerInputExportBtn'))return;
-    const button=document.createElement('button');
-    button.type='button';button.className='btn trackerInputExportBtn';button.textContent='导出 Tracker Input';
-    button.addEventListener('click',exportTrackerInput);
+function createV3Button(){
+  const button=document.createElement('button');
+  button.type='button';
+  button.className='btn trackerInputExportBtn';
+  button.textContent='导出 Tracker Input';
+  return button;
+}
+function bindV3Button(button){
+  button.type='button';
+  button.classList.add('btn','trackerInputExportBtn');
+  button.textContent='导出 Tracker Input';
+  button.dataset.trackerExportVersion=TRACKER_INPUT_EXPORT_VERSION;
+  button.onclick=exportTrackerInput;
+  return button;
+}
+function takeoverButton(bar){
+  const existing=[...bar.querySelectorAll('.trackerInputExportBtn')];
+  let button=existing[0]||null;
+  existing.slice(1).forEach(node=>node.remove());
+  if(button?.dataset.trackerExportVersion===TRACKER_INPUT_EXPORT_VERSION&&button.onclick===exportTrackerInput)return button;
+  if(button){
+    const clean=button.cloneNode(true);
+    button.replaceWith(clean);
+    button=clean;
+  }else{
+    button=createV3Button();
     const copyButton=bar.querySelector('.copyCompanyReportBtn');
     if(copyButton)copyButton.insertAdjacentElement('afterend',button);else bar.appendChild(button);
-  });
+  }
+  return bindV3Button(button);
+}
+function ensureButton(){
+  document.querySelectorAll('.reportHistoryControls').forEach(takeoverButton);
 }
 let queued=false;
 const queue=()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;ensureButton()})};
 new MutationObserver(queue).observe(document.body,{childList:true,subtree:true});
-window.NicoTrackerInputExport={version:TRACKER_INPUT_EXPORT_VERSION,currentReportWindow,buildTrackerInput,exportTrackerInput};
+window.NicoTrackerInputExport={version:TRACKER_INPUT_EXPORT_VERSION,currentReportWindow,buildTrackerInput,exportTrackerInput,ensureButton};
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',queue,{once:true});else queue();
 })();
