@@ -1,5 +1,6 @@
 (()=>{
 'use strict';
+const TRACKER_INPUT_EXPORT_VERSION='2';
 const text=value=>String(value??'').trim();
 const REPORT_TIMEZONE='Asia/Singapore';
 const GMT8_OFFSET='+08:00';
@@ -147,6 +148,6 @@ function ensureButton(){
 let queued=false;
 const queue=()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;ensureButton()})};
 new MutationObserver(queue).observe(document.body,{childList:true,subtree:true});
-window.NicoTrackerInputExport={currentReportWindow,buildTrackerInput,exportTrackerInput};
+window.NicoTrackerInputExport={version:TRACKER_INPUT_EXPORT_VERSION,currentReportWindow,buildTrackerInput,exportTrackerInput};
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',queue,{once:true});else queue();
 })();
