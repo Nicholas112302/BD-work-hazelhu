@@ -2,7 +2,6 @@
 'use strict';
 const text=value=>String(value??'').trim();
 const REPORT_TIMEZONE='Asia/Singapore';
-const REPORT_TIMEZONE_LABEL='GMT+8';
 const ymd=date=>`${date.getUTCFullYear()}-${String(date.getUTCMonth()+1).padStart(2,'0')}-${String(date.getUTCDate()).padStart(2,'0')}`;
 function singaporeToday(now=new Date()){
   const parts=new Intl.DateTimeFormat('en-CA',{timeZone:REPORT_TIMEZONE,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(now);
